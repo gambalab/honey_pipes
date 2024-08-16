@@ -47,7 +47,7 @@ Help()
         echo "-t     Number of cpus to use."
         echo "-o     Output directory."
         echo "-S     Sample name."
-        echo "-i     Path to the folder containing the unaligned BAM files"
+        echo "-i     Path to the folder containing the unaligned BAM or FASTQ files."
         echo "-m     Optinal path to Temporary Folder: To optimize performance, consider specifying a path to an additional or faster HDD. This can significantly reduce overall input/output time."
         echo "-T     SM TAG to use in the final bam file. Default is the sample name."
         echo "-s     Save Stats on aligned reads and coverage. Default true."
@@ -183,7 +183,7 @@ for FASTQ in ${BAM_INPUT_FOLDER}/*.gz; do
     print_info "Aligning & Sorting ${f}..."
     ionice -c 3 minimap2 -t ${THREADS} -ax ${M2_PRESET} ${REF_GENOME} ${FASTQ} | \
         samtools view --threads 2 -bh | \
-        sambamba sort --nthreads ${THREADS} --tmpdir="${tmpdir_sort}" -m ${MEM}G -o "${TMP_STORAGE}/${f}.fq.sorted.bam" /dev/stdin
+        sambamba sort --nthreads ${THREADS} --tmpdir="${tmpdir_sort}" -m ${MEM}G -o "${TMP_STORAGE}/${f}.sorted.bam" /dev/stdin
 
     (( count++ ))
 done
@@ -205,13 +205,8 @@ if [ ${count} -gt 1 ]; then
             -o "${BAM_OUTPUT_FOLDER}/${INDIVIDUAL}.sorted.uniq.bam" -
 else
     print_info "Adding tags ${SAMPLE}..."
-    if [ -f "${TMP_STORAGE}/${f}.sorted.bam" ]; then
-        samtools addreplacerg -@ ${THREADS} -w -r ID:${SAMPLE} -r SM:${INDIVIDUAL} -r LB:${LB_KIT} -r PL:ONT -O BAM \
+    samtools addreplacerg -@ ${THREADS} -w -r ID:${SAMPLE} -r SM:${INDIVIDUAL} -r LB:${LB_KIT} -r PL:ONT -O BAM \
             -o "${BAM_OUTPUT_FOLDER}/${INDIVIDUAL}.sorted.uniq.bam" "${TMP_STORAGE}/${f}.sorted.bam"
-    else
-        samtools addreplacerg -@ ${THREADS} -w -r ID:${SAMPLE} -r SM:${INDIVIDUAL} -r LB:${LB_KIT} -r PL:ONT -O BAM \
-            -o "${BAM_OUTPUT_FOLDER}/${INDIVIDUAL}.sorted.uniq.bam" "${TMP_STORAGE}/${f}.fq.sorted.bam"
-    fi
 fi
 
 rm ${TMP_STORAGE}/*.bam
@@ -220,7 +215,7 @@ rm ${TMP_STORAGE}/*.bai
 print_info "Indexing ..."
 sambamba index  --nthreads ${THREADS} -p "${BAM_OUTPUT_FOLDER}/${INDIVIDUAL}.sorted.uniq.bam"
 
-if [ "${STAT}" != "true" ]; then
+if [ "${STAT}" == "true" ]; then
     print_info "Computing coverage stats ${INDIVIDUAL}..."
     samtools coverage "${BAM_OUTPUT_FOLDER}/${INDIVIDUAL}.sorted.uniq.bam" > "${BAM_OUTPUT_FOLDER}/${INDIVIDUAL}.sorted.uniq.bam.cov.txt"
 
