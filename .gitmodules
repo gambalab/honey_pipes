@@ -1,0 +1,6 @@
+[submodule "DRAGMAP"]
+	path = DRAGMAP
+	url = https://github.com/gambalab/DRAGMAP
+[submodule "minimap2"]
+	path = minimap2
+	url = https://github.com/lh3/minimap2
