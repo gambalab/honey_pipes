@@ -33,7 +33,9 @@ Help()
 {
    # Display Help
     echo
-    echo "This pipeline convert pod5 files into fastQ using dorado duplex sup model. Output fastQ are trimmed by default using dorado trim."
+    echo "This pipeline convert pod5 files into reads will be stored into a BAM using dorado duplex sup command."
+    echo
+    echo "Reads are trimmed by default using dorado trim."
     echo
     echo "It does not require internet since models have been packaged into this singularity image."
     echo
@@ -52,7 +54,8 @@ Help()
 # A POSIX variable
 OPTIND=1         # Reset in case getopts has been used previously in the shell.
 CUDA_D=""
-while getopts ":h:t:i:o:s:" option; do
+TRIMMING="true"
+while getopts ":ht:i:o:s:" option; do
    case $option in
       h) # display Help
          Help
@@ -65,7 +68,7 @@ while getopts ":h:t:i:o:s:" option; do
          ((count++))
          ;;
       o)
-         FASTQ_FOLDER=${OPTARG}
+         BAM_OUT_FOLDER=${OPTARG}
          ((count++))
          ;;
       s)
@@ -99,6 +102,11 @@ if [ "${CUDA_D}" != "" ]; then
    CUDA_D="--device ${CUDA_D}"
 fi
 
-echo "Sample ${i}"
-dorado duplex sup ${CUDA_D} ${POD5_FOLDER} | dorado trim -t 4 > ${FASTQ_FOLDER}/${SAMPLE}_trimmed.bam
+print_info "Processing ${SAMPLE}..."
+if [ "${TRIMMING}" == "true" ]; then
+   dorado duplex sup ${CUDA_D} ${POD5_FOLDER} | dorado trim -t 4 > ${BAM_OUT_FOLDER}/${SAMPLE}_trimmed.bam
+else
+   dorado duplex sup ${CUDA_D} ${POD5_FOLDER} > ${BAM_OUT_FOLDER}/${SAMPLE}_untrimmed.bam
+fi
+print_info "FINISHED!!"
 

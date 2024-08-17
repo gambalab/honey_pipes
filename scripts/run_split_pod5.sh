@@ -33,7 +33,8 @@ Help()
 {
    # Display Help
     echo
-    echo "The pipeline leverages the pod5 package to efficiently divide fast5 files into channel-specific pod5 formats. "
+    echo "The pipeline leverages the pod5 package to efficiently divide fast5 or pod5 files into channel-specific pod5 formats."
+    echo "If the input folder contains fast5 files these are first converted into POD5 and then splitted."
     echo
     echo "This optimization is expected to significantly improve basecalling performance."
     echo
@@ -50,7 +51,7 @@ Help()
 
 # A POSIX variable
 OPTIND=1         # Reset in case getopts has been used previously in the shell.
-while getopts ":h:t:i:o:s:" option; do
+while getopts ":ht:i:o:s:" option; do
    case $option in
       h) # display Help
          Help
@@ -94,14 +95,36 @@ fi
 
 POD5="${POD5}/${SAMPLE}"
 mkdir -p ${POD5}
-print_info "Start Conversion fast5 to pod5 for ${SAMPLE} .."
-ionice -c 3 pod5 convert fast5 --force-overwrite --t ${cpus} -o ${POD5} ${FAST5_FOLDER}
 
-print_info "Compute channel summary ..."
-ionice -c 3 pod5 view ${POD5} --force-overwrite -t ${cpus} --include "read_id, channel" --output ${POD5}/channel.summary.tsv
+fast5=""
+for test in ${FAST5_FOLDER}/*.fast5; do
+   fast5="true"
+   break
+done
 
-print_info "Start Channel Splitting ..."
-ionice -c 3 pod5 subset ${POD5} --force-overwrite -t ${cpus} --summary ${POD5}/channel.summary.tsv --columns channel --output ${POD5}/pod5_by_channel/
+if [ ${fast5} == "true" ]; then
+   print_info "Detected fast5 files.."
+   print_info "Start Conversion fast5 to pod5 for ${SAMPLE} .."
+   ionice -c 3 pod5 convert fast5 --force-overwrite --t ${cpus} -o ${POD5} ${FAST5_FOLDER}
+fi
 
-rm ${POD5}/*.pod5
-print_info "Finished!"
+pod5=""
+for test in ${FAST5_FOLDER}/*.pod5; do
+   pod5="true"
+   break
+done
+
+if [ ${pod5} == "true" ]; then
+   print_info "Compute channel summary ..."
+   ionice -c 3 pod5 view ${POD5} --force-overwrite -t ${cpus} --include "read_id, channel" --output ${POD5}/channel.summary.tsv
+
+   print_info "Start Channel Splitting ..."
+   ionice -c 3 pod5 subset ${POD5} --force-overwrite -t ${cpus} --summary ${POD5}/channel.summary.tsv --columns channel --output ${POD5}/pod5_by_channel/
+
+   if [ ${fast5} == "true" ]; then 
+      rm ${POD5}/*.pod5
+   fi
+   print_info "Finished!"
+else
+   print_error "No FAST5 or POD5 found in the input directory!"
+fi
