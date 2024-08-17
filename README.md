@@ -16,19 +16,19 @@ To install the honey pipes Docker/Singularity image, run the following commands:
 
 ```bash
 # 1. Install with Singularity and test it
-singularity pull docker://gambalab/honey_pipe:1.0.0
+singularity pull docker://gambalab/honey_pipes:1.0.0
 
 # 2. Install with Docker and test it
-docker pull gambalab/honey_pipe:1.0.0
+docker pull gambalab/honey_pipes:1.0.0
 ```
 
 The slim version can be installed as following:
 ```bash
 # 1. Install with Singularity and test it
-singularity pull docker://gambalab/honey_pipe_slim:1.0.0
+singularity pull docker://gambalab/honey_pipes_slim:1.0.0
 
 # 2. Install with Docker and test it
-docker pull gambalab/honey_pipe_slim:1.0.0
+docker pull gambalab/honey_pipes_slim:1.0.0
 ```
 
 ## 1. Pipeline for Short Read Alignment with DragMap
