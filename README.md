@@ -1,14 +1,15 @@
+# HONEY PIPES
+A set high-performance, easy-to-use, open source pipelines for processing Illumina and Oxford Nanopore reads.
+If you use this repository please cite our manuscript on Bioxriv available at following address **www_URL_coming_soon.com**.
 
-# Introduction
-If you use this repository please cite our manuscript on Bioxriv available at following address **www_URL_coming_soon.com**..
-
-This repository provides pipelines used in our recent publication available on BioRxiv at DOI for processing raw Oxford Nanopore Technology (ONT) and Illumina sequencing data from three key consortia: Genome in a Bottle (GIAB), Human Pangenome Reference Consortium (HPRC), and Oxford Nanopore Technologies Open Data (ONT OD).
+## Features
+This repository provides pipelines used in our recent publication available on BioRxiv at **www_URL_coming_soon.com** for processing raw Oxford Nanopore Technology (ONT) and Illumina sequencing data from three key consortia: Genome in a Bottle (GIAB), Human Pangenome Reference Consortium (HPRC), and Oxford Nanopore Technologies Open Data (ONT OD).
 
 * **Harmonized data**: The processed data is now publicly available for the scientific community at **www_URL_coming_soon.com**.
 
 * **Hybrid DeepVariant training**: This data was then used to train a novel DeepVariant model specifically designed for identifying variants from combined short-read and long-read sequencing data (hybrid sequencing). The resulting Honey DeepVariant tool for variant calling in hybrid sequencing data is available on GitHub: https://github.com/gambalab/honey_deepvariant
 
-# Honey Pipes Overview
+## Honey Pipes Overview
 All pipelines are packaged into a single Singularity container named honey_pipes. This container includes the Dorado v0.7.3 base caller (https://github.com/nanoporetech/dorado) and all necessary models for base calling raw Oxford Nanopore Technology (ONT) data. A slim version of honey_pipes is also available, excluding Nvidia support and Dorado for users who don't require it or prefer to use their own version. Honey pipes image also incorporates some useful tools such as **bcftools**, **samtools**, **tabix**, **sambamba**, **bbmap**, **pod5**, **dragen-os**, and **minimap2** for added convenience.
 
 ## Installation of honey pipes package
