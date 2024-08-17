@@ -61,7 +61,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Include dorado
 RUN wget -qO- https://cdn.oxfordnanoportal.com/software/analysis/dorado-0.7.3-linux-x64.tar.gz | tar -xvz -C /opt
 RUN mv /opt/dorado-0.7.3-linux-x64 /opt/dorado
-RUN /opt/dorado/bin/dorado download --model all --directory /opt/dorado/models
+RUN /opt/dorado/bin/dorado download --model all --directory /opt/dorado/bin
 
 # Copying DRAGMAP source code and build
 COPY ./DRAGMAP /opt/dragmap_src
@@ -77,10 +77,9 @@ RUN make -j4
 
 # Copy bin files
 WORKDIR /opt/bin
-COPY ./scripts/run_aln_long.sh .
+COPY ./scripts/*.sh .
 RUN cp /opt/dragmap_src/build/release/dragen-os .
 RUN cp /opt/dragmap_src/build/release/compare .
-RUN cp /opt/dragmap_src/scripts/run_aln.sh ./run_aln_short.sh
 RUN cp /opt/minimap_src/minimap2 .
 RUN chmod +x /opt/bin/*
 

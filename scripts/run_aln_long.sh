@@ -41,7 +41,7 @@ Help()
     echo
     echo "Since FASTQ format lacks read type information (simplex, duplex, or parent), distinguishing these read types is only feasible with BAM input generated using the dorado duplex basecalling command."
     echo
-    echo "Syntax: run_dragen.sh [h|t|o|S|i|m|T|s|r|p|M|l]"
+    echo "Syntax: run_aln_long.sh [h|t|o|S|i|m|T|s|r|p|M|l]"
         echo "options:"
         echo "-h     Print this Help."
         echo "-t     Number of cpus to use."

@@ -57,12 +57,11 @@ COPY ./minimap2 /opt/minimap_src
 WORKDIR /opt/minimap_src
 RUN make -j4
 
-
+# Copy bin files
 WORKDIR /opt/bin
-COPY ./scripts/run_aln_long.sh .
+COPY ./scripts/*.sh .
 RUN cp /opt/dragmap_src/build/release/dragen-os .
 RUN cp /opt/dragmap_src/build/release/compare .
-RUN cp /opt/dragmap_src/scripts/run_aln.sh ./run_aln_short.sh
 RUN cp /opt/minimap_src/minimap2 .
 RUN chmod +x /opt/bin/*
 
