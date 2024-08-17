@@ -9,10 +9,9 @@ This repository provides pipelines used in our recent publication available on B
 
 * **Hybrid DeepVariant training**: This data was then used to train a novel DeepVariant model specifically designed for identifying variants from combined short-read and long-read sequencing data (hybrid sequencing). The resulting Honey DeepVariant tool for variant calling in hybrid sequencing data is available on GitHub: https://github.com/gambalab/honey_deepvariant
 
-## Honey Pipes Overview
 All pipelines are packaged into a single Singularity container named honey_pipes. This container includes the Dorado v0.7.3 base caller (https://github.com/nanoporetech/dorado) and all necessary models for base calling raw Oxford Nanopore Technology (ONT) data. A slim version of honey_pipes is also available, excluding Nvidia support and Dorado for users who don't require it or prefer to use their own version. Honey pipes image also incorporates some useful tools such as **bcftools**, **samtools**, **tabix**, **sambamba**, **bbmap**, **pod5**, **dragen-os**, and **minimap2** for added convenience.
 
-## Installation of honey pipes package
+## Installation
 To install the honey pipes Docker/Singularity image, run the following commands:
 
 ```bash
