@@ -33,7 +33,7 @@ docker pull gambalab/honey_pipe_slim:1.0.0
 
 ## 1. Pipeline for Short Read Alignment with DragMap
 
-**Description:** This pipeline utilizes the DragMap aligner (https://github.com/Illumina/DRAGMAP) for efficient alignment of short read data obtained from Illumina sequencing platforms. It offers optional pre- and post-processing steps to enhance alignment quality.
+**Description:** This pipeline utilizes the DragMap aligner (https://github.com/gambalab/DRAGMAP) for efficient alignment of short read data obtained from Illumina sequencing platforms. It offers optional pre- and post-processing steps to enhance alignment quality.
 * **Input:** Raw FASTQ files.
 * **Preprocessing** (optional): Adapter trimming using bbduk (https://github.com/kbaseapps/BBTools).
 * **Alignment:** DragMap aligns the reads to a reference genome.
@@ -262,3 +262,17 @@ ${HONEY_exec} \
 
 ```
 Aligned and merged BAM file will be storend into ```/path/to/output_folder/sample_name/SM_tag.sorted.uniq.bam```.
+
+## Acknowledgements
+Honey pipes happily makes use of many open source packages. We would like to specifically call out a few key ones:
+[bcftools](https://github.com/samtools/bcftools)
+[samtools](https://github.com/samtools/samtools)
+[tabix](https://github.com/samtools/tabix)
+[sambamba](https://github.com/biod/sambamba)
+[bbmap](https://jgi.doe.gov/data-and-tools/software-tools/bbtools/bb-tools-user-guide/bbmap-guide/)
+[pod5](https://github.com/nanoporetech/pod5-file-format)
+[dragen-os](https://github.com/Illumina/DRAGMAP)
+[minimap2](https://github.com/lh3/minimap2)
+[dorado](https://github.com/nanoporetech/dorado)
+
+We thank all of the developers and contributors to these packages for their work.
