@@ -223,4 +223,4 @@ if [ "${STAT}" == "true" ]; then
     sambamba flagstat --nthreads ${THREADS} -p "${BAM_OUTPUT_FOLDER}/${INDIVIDUAL}.sorted.uniq.bam" > "${BAM_OUTPUT_FOLDER}/${INDIVIDUAL}.sorted.uniq.bam.stat.txt"
 fi
 
-rm -rf "${TMP_STORAGE}
+rm -rf ${TMP_STORAGE}

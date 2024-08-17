@@ -13,8 +13,8 @@ RUN conda create -y -n bio \
                     bioconda::samtools=1.20 \
                     bioconda::tabix=0.2.6 \
                     bioconda::sambamba=1.0.1 \
-			    	bioconda::bbmap=39.06 \
-    				&& conda clean -a
+		    bioconda::bbmap=39.06 \
+		    && conda clean -a
 
 RUN conda create -y -n pod5 \
     && conda init \
@@ -61,6 +61,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Include dorado
 RUN wget -qO- https://cdn.oxfordnanoportal.com/software/analysis/dorado-0.7.3-linux-x64.tar.gz | tar -xvz -C /opt
 RUN mv /opt/dorado-0.7.3-linux-x64 /opt/dorado
+RUN /opt/dorado/bin/dorado download --model all --directory /opt/dorado/models
 
 # Copying DRAGMAP source code and build
 COPY ./DRAGMAP /opt/dragmap_src
