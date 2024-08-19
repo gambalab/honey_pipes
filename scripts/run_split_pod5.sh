@@ -98,36 +98,27 @@ mkdir -p ${POD5}
 
 myarray=(`find ${FAST5_FOLDER} -maxdepth 1 -name "*.fast5"`)
 if [ ${#myarray[@]} -gt 0 ]; then 
-    ast5=true 
+
+    print_info "Detected fast5 files.."
+    print_info "Start Conversion fast5 to pod5 for ${SAMPLE} .."
+    ionice -c 3 pod5 convert fast5 --force-overwrite --t ${cpus} -o ${POD5} ${FAST5_FOLDER}
+
+    print_info "Compute channel summary ..."
+    ionice -c 3 pod5 view ${POD5} --force-overwrite -t ${cpus} --include "read_id, channel" --output ${POD5}/channel.summary.tsv
+    ionice -c 3 pod5 subset ${POD5} --force-overwrite -t ${cpus} --summary ${POD5}/channel.summary.tsv --columns channel --output ${POD5}/pod5_by_channel/
+    rm ${POD5}/*.pod5
+
 else 
-    fast5=false
-fi
-
-if [ ${fast5} ]; then
-   print_info "Detected fast5 files.."
-   print_info "Start Conversion fast5 to pod5 for ${SAMPLE} .."
-   ionice -c 3 pod5 convert fast5 --force-overwrite --t ${cpus} -o ${POD5} ${FAST5_FOLDER}
-fi
-
-myarray=(`find ${FAST5_FOLDER} -maxdepth 1 -name "*.pod5"`)
-if [ ${#myarray[@]} -gt 0 ]; then 
-    pod5=true 
-else 
-    pod5=false
-fi
-
-
-if [ ${pod5} ]; then
-   print_info "Compute channel summary ..."
-   ionice -c 3 pod5 view ${POD5} --force-overwrite -t ${cpus} --include "read_id, channel" --output ${POD5}/channel.summary.tsv
-
-   print_info "Start Channel Splitting ..."
-   ionice -c 3 pod5 subset ${POD5} --force-overwrite -t ${cpus} --summary ${POD5}/channel.summary.tsv --columns channel --output ${POD5}/pod5_by_channel/
-
-   if [ ${fast5} ]; then 
-      rm ${POD5}/*.pod5
+   myarray=(`find ${FAST5_FOLDER} -maxdepth 1 -name "*.pod5"`)
+   if [ ${#myarray[@]} -gt 0 ]; then 
+      
+      print_info "Detected pod5 files.."
+      print_info "Compute channel summary ..."
+      ionice -c 3 pod5 view ${FAST5_FOLDER} --force-overwrite -t ${cpus} --include "read_id, channel" --output ${POD5}/channel.summary.tsv
+      
+      print_info "Start Channel Splitting ..."
+      ionice -c 3 pod5 subset ${FAST5_FOLDER} --force-overwrite -t ${cpus} --summary ${POD5}/channel.summary.tsv --columns channel --output ${POD5}/pod5_by_channel/
+   else 
+       print_error "No FAST5 or POD5 found in the input directory!"
    fi
-   print_info "Finished!"
-else
-   print_error "No FAST5 or POD5 found in the input directory!"
 fi
