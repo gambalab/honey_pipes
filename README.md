@@ -43,7 +43,7 @@ The pipeline is coded in the ```run_aln_short.sh``` script and can be run in the
 
 ```bash
 # Let's define a honey_pipe_exec variable to excec the several commands 
-HONEY_exec="singularity exec --bind /usr/lib/locale/ path/to/honey_pipe_1.0.0.sif"
+HONEY_exec="singularity exec --bind /usr/lib/locale/ path/to/honey_pipes_1.0.0.sif"
 
 # Let's see the help
 ${HONEY_exec} run_aln_short.sh -h
@@ -112,7 +112,7 @@ ${HONEY_exec} dragen-os \
 The pipeline is coded in the ```run_split_pod5.sh``` script and can be run in the following way:
 ```bash
 # Let's define a honey_pipe_exec variable to excec the several commands 
-HONEY_exec="singularity exec --bind /usr/lib/locale/ path/to/honey_pipe_1.0.0.sif"
+HONEY_exec="singularity exec --bind /usr/lib/locale/ path/to/honey_pipes_1.0.0.sif"
 
 # Let's see the help
 ${HONEY_exec} run_split_pod5.sh -h
@@ -160,7 +160,7 @@ The pipeline is coded in the ```run_split_pod5.sh``` script and can be run in th
 ```bash
 # Let's define a honey_pipe_exec variable to excec the several commands
 # Here we need to enable Nvidia Support since dorado requires it.
-HONEY_exec="singularity exec --nv --bind /usr/lib/locale/ path/to/honey_pipe_1.0.0.sif"
+HONEY_exec="singularity exec --nv --bind /usr/lib/locale/ path/to/honey_pipes_1.0.0.sif"
 
 # Let's see the help
 ${HONEY_exec} run_dorado_duplex.sh -h
@@ -197,7 +197,7 @@ BAM file will be storend into ```/path/to/output_folder/sample_name/sample_name_
 ```bash
 # Let's define a honey_pipe_exec variable to excec the several commands
 # Here we need to enable Nvidia Support since dorado requires it.
-HONEY_exec="singularity exec --nv --bind /usr/lib/locale/ path/to/honey_pipe_1.0.0.sif"
+HONEY_exec="singularity exec --nv --bind /usr/lib/locale/ path/to/honey_pipes_1.0.0.sif"
 
 # Let's see the help
 ${HONEY_exec} dorado --version
@@ -218,7 +218,7 @@ ${HONEY_exec} dorado --version
 The pipeline is coded in the ```run_aln_long.sh``` script and can be run in the following way:
 ```bash
 # Let's define a honey_pipe_exec variable to excec the several commands
-HONEY_exec="singularity exec --bind /usr/lib/locale/ path/to/honey_pipe_1.0.0.sif"
+HONEY_exec="singularity exec --bind /usr/lib/locale/ path/to/honey_pipes_1.0.0.sif"
 
 # Let's see the help
 ${HONEY_exec} run_aln_long.sh -h
