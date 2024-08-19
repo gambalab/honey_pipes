@@ -124,7 +124,7 @@ if [ ${pod5} ]; then
    print_info "Start Channel Splitting ..."
    ionice -c 3 pod5 subset ${POD5} --force-overwrite -t ${cpus} --summary ${POD5}/channel.summary.tsv --columns channel --output ${POD5}/pod5_by_channel/
 
-   if [ ${fast5} == "true" ]; then 
+   if [ ${fast5} ]; then 
       rm ${POD5}/*.pod5
    fi
    print_info "Finished!"
