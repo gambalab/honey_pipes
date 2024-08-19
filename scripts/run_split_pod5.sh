@@ -96,25 +96,28 @@ fi
 POD5="${POD5}/${SAMPLE}"
 mkdir -p ${POD5}
 
-fast5=""
-for test in ${FAST5_FOLDER}/*.fast5; do
-   fast5="true"
-   break
-done
+myarray=(`find ${FAST5_FOLDER} -maxdepth 1 -name "*.fast5"`)
+if [ ${#myarray[@]} -gt 0 ]; then 
+    ast5=true 
+else 
+    fast5=false
+fi
 
-if [ ${fast5} == "true" ]; then
+if [ ${fast5} ]; then
    print_info "Detected fast5 files.."
    print_info "Start Conversion fast5 to pod5 for ${SAMPLE} .."
    ionice -c 3 pod5 convert fast5 --force-overwrite --t ${cpus} -o ${POD5} ${FAST5_FOLDER}
 fi
 
-pod5=""
-for test in ${FAST5_FOLDER}/*.pod5; do
-   pod5="true"
-   break
-done
+myarray=(`find ${FAST5_FOLDER} -maxdepth 1 -name "*.pod5"`)
+if [ ${#myarray[@]} -gt 0 ]; then 
+    pod5=true 
+else 
+    pod5=false
+fi
 
-if [ ${pod5} == "true" ]; then
+
+if [ ${pod5} ]; then
    print_info "Compute channel summary ..."
    ionice -c 3 pod5 view ${POD5} --force-overwrite -t ${cpus} --include "read_id, channel" --output ${POD5}/channel.summary.tsv
 
