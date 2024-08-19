@@ -40,7 +40,7 @@ Help()
     echo "It does not require internet since models have been packaged into this singularity image."
     echo
     echo "Output folder will contain a folder named pod5_by_channel containing the pod5 files."
-    echo "Syntax: run_dorado_duplex.sh [h|i|o|t]"
+    echo "Syntax: run_dorado_duplex.sh [h|i|o|t|m]"
         echo "options:"
         echo "-h     Print this Help."
         echo "-i     Path to the folder containing the pod5 files"
@@ -48,6 +48,7 @@ Help()
         echo "-s     Sample name."
         echo "-T     FastQ trimming. Default is true."
         echo "-C     Optional cuda device to pass to dorado, e.g. cuda:0,1"
+        echo "-m     Use embedded models and don't download it at runtime. Default true."
         echo
 }
 
@@ -55,7 +56,8 @@ Help()
 OPTIND=1         # Reset in case getopts has been used previously in the shell.
 CUDA_D=""
 TRIMMING="true"
-while getopts ":ht:i:o:s:" option; do
+MODELS="true"
+while getopts ":ht:i:o:s:m:" option; do
    case $option in
       h) # display Help
          Help
@@ -77,6 +79,8 @@ while getopts ":ht:i:o:s:" option; do
          ;;
       c) 
          CUDA_D=${OPTARG}
+         ;;
+      m) MODELS=${OPTARG}
          ;;
       :)
          print_error "Option -${OPTARG} requires an argument."
@@ -103,6 +107,10 @@ if [ "${CUDA_D}" != "" ]; then
 fi
 
 print_info "Processing ${SAMPLE}..."
+if [ ${MODELS} == "true" ]; then
+   cd /opt/dorado/models
+fi
+
 if [ "${TRIMMING}" == "true" ]; then
    dorado duplex sup ${CUDA_D} ${POD5_FOLDER} | dorado trim -t 4 > ${BAM_OUT_FOLDER}/${SAMPLE}_trimmed.bam
 else
