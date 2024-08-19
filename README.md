@@ -146,7 +146,7 @@ ${HONEY_exec} \
 POD5 file will be storend into ```/path/to/output_folder/sample_name/pod5_by_channel/``` folder.
 
 ## 3. Pipeline for converting POD5 to ONT Long Reads (Not available in honey pipes slim)
-**Description:** This pipeline converts POD5 files into long reads in BAM format using the dorado duplex sup command. The pipeline optionaly trims reads using dorado trim and selects the appropriate model for basecalling. The required models are included within the Singularity image, eliminating the need for internet connectivity.
+**Description:** This pipeline converts POD5 files into long reads in BAM format using the dorado duplex sup command. The pipeline optionaly trims reads using dorado trim and selects the appropriate model for basecalling. The required models are included within the Singularity image, eliminating the need for internet connectivity (default behavior).
 
 * **Input:** Folder containing POD5 files.
 * **Processing:** 
@@ -173,7 +173,7 @@ Reads are trimmed by default using dorado trim.
 It does not require internet since models have been packaged into this singularity image.
 
 Output folder will contain a folder named pod5_by_channel containing the pod5 files.
-Syntax: run_dorado_duplex.sh [h|i|o|t]
+Syntax: run_dorado_duplex.sh [h|i|o|t|m]
 options:
 -h     Print this Help.
 -i     Path to the folder containing the pod5 files
@@ -181,6 +181,7 @@ options:
 -s     Sample name.
 -T     FastQ trimming. Default is true.
 -C     Optional cuda device to pass to dorado, e.g. cuda:0,1
+-m     Use embedded models and don't download it at runtime. Default true.
 ```
 
 So a typical case of use will be something like this:
