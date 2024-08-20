@@ -9,7 +9,7 @@ This repository provides pipelines used in our recent publication available on B
 
 * **Hybrid DeepVariant training**: This data was then used to train a novel DeepVariant model specifically designed for identifying variants from combined short-read and long-read sequencing data (hybrid sequencing). The resulting Honey DeepVariant tool for variant calling in hybrid sequencing data is available on GitHub: https://github.com/gambalab/honey_deepvariant
 
-All pipelines are packaged into a single Singularity container named honey_pipes. This container includes the Dorado v0.7.3 base caller (https://github.com/nanoporetech/dorado) and all necessary models for base calling raw Oxford Nanopore Technology (ONT) data. A slim version of honey_pipes is also available, excluding Nvidia support and Dorado for users who don't require it or prefer to use their own version. Honey pipes image also incorporates some useful tools such as **bcftools**, **samtools**, **tabix**, **sambamba**, **bedtools**, **mosdepth** **bbmap**, **pod5**, **dragen-os**, and **minimap2** for added convenience.
+All pipelines are packaged into a single Singularity container named honey_pipes. This container includes the Dorado v0.7.3 base caller (https://github.com/nanoporetech/dorado) and all necessary models for base calling raw Oxford Nanopore Technology (ONT) data. A slim version of honey_pipes is also available, excluding Nvidia support and Dorado for users who don't require it or prefer to use their own version. Honey pipes image also incorporates some useful tools such as **bcftools**, **samtools**, **tabix**, **sambamba**, **bedtools**, **mosdepth** **bbmap**, **pod5**, **dragen-os**, **minimap2**, **dysgu** and **SVision** for added convenience.
 
 ## Installation
 To install the honey pipes Docker/Singularity image, run the following commands:
@@ -265,6 +265,38 @@ ${HONEY_exec} \
 ```
 Aligned and merged BAM file will be storend into ```/path/to/output_folder/sample_name/SM_tag.sorted.uniq.bam```.
 
+## 4. Pipeline for SVs.
+**Description:** to add.
+
+* **Input:** to add.
+
+* **Processing:**
+    * a
+    * b
+    * c
+
+* **Output:** to add.
+
+The pipeline is coded in the ```run_svs.sh``` script and can be run in the following way:
+```bash
+# Let's define a honey_pipe_exec variable to excec the several commands
+HONEY_exec="singularity exec --bind /usr/lib/locale/ path/to/honey_pipes_1.0.0.sif"
+
+# Let's see the help
+${HONEY_exec} run_svs.sh -h
+```
+```
+This pipeline employs ..
+```
+So a typical case of use will be something like this:
+```bash
+#NOTE: by default the SM tag used is the sample name provided with -S
+${HONEY_exec} \
+    run_svs.sh -h
+```
+Aligned and merged BAM file will be storend into ```/path/to/output_folder/sample_name/```.
+
+
 ## Acknowledgements
 Honey pipes happily makes use of many open source packages. We would like to specifically call out a few key ones:
 *	[bcftools](https://github.com/samtools/bcftools)
@@ -278,5 +310,7 @@ Honey pipes happily makes use of many open source packages. We would like to spe
 *	[dorado](https://github.com/nanoporetech/dorado)
 *   [bedtools](https://github.com/arq5x/bedtools2)
 *   [mosdepth](https://github.com/brentp/mosdepth)
+*   [dysgu](https://github.com/kcleal/dysgu)
+*   [SVision](https://github.com/xjtu-omics/SVision)
 
 We thank all of the developers and contributors to these packages for their work.
