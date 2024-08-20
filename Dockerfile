@@ -13,7 +13,8 @@ RUN conda create -y -n bio \
                     bioconda::samtools=1.20 \
                     bioconda::tabix=0.2.6 \
                     bioconda::sambamba=1.0.1 \
-		    bioconda::bbmap=39.06 \
+		            bioconda::bbmap=39.06 \
+                    bioconda::bedtools=2.31.1 \
 		    && conda clean -a
 
 RUN conda create -y -n pod5 \
@@ -24,6 +25,23 @@ RUN conda create -y -n pod5 \
     && pip install pod5 \
     && conda deactivate \
     && conda clean -a
+
+# create dysgu conda env
+RUN conda create -y -n dysgu \
+                    bioconda::dysgu=1.6.6
+
+# create svisionenv conda env
+RUN wget -qO- https://github.com/xjtu-omics/SVision/archive/refs/tags/v1.4.tar.gz | tar -xvz -C /opt
+WORKDIR /opt/SVision-1.4
+COPY ./useful/svision_environment.yml /opt/SVision-1.4/environment.yml
+RUN conda env create -y -f environment.yml \
+        && conda init \
+        && . ~/.bashrc \
+        && conda activate svisionenv \
+        && python setup.py install \
+        && conda deactivate \
+        && conda clean -a
+RUN rm -rf /opt/SVision-1.4
 
 # Stage cuda ubuntu base
 FROM nvidia/cuda:12.6.0-runtime-ubuntu24.04 AS base
@@ -82,6 +100,7 @@ COPY ./scripts/*.sh .
 RUN cp /opt/dragmap_src/build/release/dragen-os .
 RUN cp /opt/dragmap_src/build/release/compare .
 RUN cp /opt/minimap_src/minimap2 .
+RUN wget --no-check-certificate https://github.com/brentp/mosdepth/releases/download/v0.3.8/mosdepth_d4
 RUN chmod +x /opt/bin/*
 
 # clear source files

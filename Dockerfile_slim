@@ -7,18 +7,24 @@
 # $ cd honey_pipes
 # $ sudo docker build -f ./Dockerfile_slim -t honey_tools_slim .
 
+# Stage miniconda envs
 FROM continuumio/miniconda3 AS conda_setup
+
+# create bio tools conda env
 RUN conda config --add channels defaults && \
     conda config --add channels bioconda && \
     conda config --add channels conda-forge
+
 RUN conda create -y -n bio \
                     bioconda::bcftools=1.20 \
                     bioconda::samtools=1.20 \
                     bioconda::tabix=0.2.6 \
                     bioconda::sambamba=1.0.1 \
 		            bioconda::bbmap=39.06 \
+                    bioconda::bedtools=2.31.1 \
                     && conda clean -a
 
+# create pod5 conda env
 RUN conda create -y -n pod5 \
     && conda init \
     && . ~/.bashrc \
@@ -28,22 +34,37 @@ RUN conda create -y -n pod5 \
     && conda deactivate \
     && conda clean -a
 
-FROM ubuntu:24.04 AS builder
+# create dysgu conda env
+RUN conda create -y -n dysgu \
+                    bioconda::dysgu=1.6.6
+
+# create svisionenv conda env
+RUN wget -qO- https://github.com/xjtu-omics/SVision/archive/refs/tags/v1.4.tar.gz | tar -xvz -C /opt
+WORKDIR /opt/SVision-1.4
+COPY ./useful/svision_environment.yml /opt/SVision-1.4/environment.yml
+RUN conda env create -y -f environment.yml \
+        && conda init \
+        && . ~/.bashrc \
+        && conda activate svisionenv \
+        && python setup.py install \
+        && conda deactivate \
+        && conda clean -a
+RUN rm -rf /opt/SVision-1.4
+
+# Stage ubuntu base
+FROM ubuntu:24.04 AS base
 
 COPY --from=conda_setup /opt/conda /opt/conda
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
+        wget \
         build-essential \
         libboost-all-dev \
         libgtest-dev && \
         apt-get autoremove && \
         apt-get clean && \
     rm -rf /var/lib/apt/lists
-
-# Include dorado
-WORKDIR /tmp/
-RUN 
 
 # Copying DRAGMAP source code and build
 COPY ./DRAGMAP /opt/dragmap_src
@@ -63,9 +84,10 @@ COPY ./scripts/*.sh .
 RUN cp /opt/dragmap_src/build/release/dragen-os .
 RUN cp /opt/dragmap_src/build/release/compare .
 RUN cp /opt/minimap_src/minimap2 .
+RUN wget --no-check-certificate https://github.com/brentp/mosdepth/releases/download/v0.3.8/mosdepth_d4
 RUN chmod +x /opt/bin/*
 
 # clea files
 RUN rm -rf /opt/minimap_src /opt/dragmap_src/
 
-ENV PATH="${PATH}":/opt/conda/bin:/opt/conda/envs/bio/bin:/opt/conda/envs/pod5/bin:/opt/bin
+ENV PATH="${PATH}":/opt/conda/bin:/opt/conda/envs/bio/bin:/opt/conda/envs/dysgu/bin:/opt/conda/envs/svisionenv/bin:/opt/conda/envs/pod5/bin:/opt/bin

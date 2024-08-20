@@ -9,7 +9,7 @@ This repository provides pipelines used in our recent publication available on B
 
 * **Hybrid DeepVariant training**: This data was then used to train a novel DeepVariant model specifically designed for identifying variants from combined short-read and long-read sequencing data (hybrid sequencing). The resulting Honey DeepVariant tool for variant calling in hybrid sequencing data is available on GitHub: https://github.com/gambalab/honey_deepvariant
 
-All pipelines are packaged into a single Singularity container named honey_pipes. This container includes the Dorado v0.7.3 base caller (https://github.com/nanoporetech/dorado) and all necessary models for base calling raw Oxford Nanopore Technology (ONT) data. A slim version of honey_pipes is also available, excluding Nvidia support and Dorado for users who don't require it or prefer to use their own version. Honey pipes image also incorporates some useful tools such as **bcftools**, **samtools**, **tabix**, **sambamba**, **bbmap**, **pod5**, **dragen-os**, and **minimap2** for added convenience.
+All pipelines are packaged into a single Singularity container named honey_pipes. This container includes the Dorado v0.7.3 base caller (https://github.com/nanoporetech/dorado) and all necessary models for base calling raw Oxford Nanopore Technology (ONT) data. A slim version of honey_pipes is also available, excluding Nvidia support and Dorado for users who don't require it or prefer to use their own version. Honey pipes image also incorporates some useful tools such as **bcftools**, **samtools**, **tabix**, **sambamba**, **bedtools**, **mosdepth** **bbmap**, **pod5**, **dragen-os**, and **minimap2** for added convenience.
 
 ## Installation
 To install the honey pipes Docker/Singularity image, run the following commands:
@@ -63,7 +63,7 @@ Key Steps:
 
 This streamlined workflow ensures accurate and efficient read alignment, while the organized output facilitates downstream analysis.
 
-Syntax: run_aln_short.sh [h|s|1|2|o|r|c|t]
+Syntax: run_aln_short.sh [h|s|1|2|o|r|c|t|b]
 options:
 -h     Print this Help.
 -c     Number of cpus to use.
@@ -73,6 +73,7 @@ options:
 -2     Path to the read2 FASTQ
 -r     Path to the Dragmap reference folder.
 -t     Trimming. Default false.
+-b     BED file with regions will be used to compute coverage. Otherwise coverage stats are computed whole genome.
 ```
 
 So a typical case of use will be something like this:
@@ -275,5 +276,7 @@ Honey pipes happily makes use of many open source packages. We would like to spe
 *	[dragen-os](https://github.com/Illumina/DRAGMAP)
 *	[minimap2](https://github.com/lh3/minimap2)
 *	[dorado](https://github.com/nanoporetech/dorado)
+*   [bedtools](https://github.com/arq5x/bedtools2)
+*   [mosdepth](https://github.com/brentp/mosdepth)
 
 We thank all of the developers and contributors to these packages for their work.

@@ -32,39 +32,41 @@ print_error(){
 Help()
 {
    # Display Help
-	echo
-	echo "This pipeline employs DragMap for efficient read alignment, incorporating optional preprocessing and post-processing steps."
-	echo
-	echo "Key Steps:"
-	echo
-	echo "  1. Optional Trimming: If enabled, reads are initially trimmed using the BBduk tool to remove low-quality bases and adaptors."
-	echo "  2. Alignment: The trimmed or original reads are aligned to the reference genome using DragMap."
-	echo "  3. Duplicate Marking and Removal: Samtools markdup is utilized to identify and remove potential PCR duplicates from the aligned reads."
-	echo "  4. Output Organization: Results are organized into three distinct folders:"
-	echo -e "\t 4.1 aln: Contains the final aligned BAM file."
-	echo -e "\t 4.2 fastq: Stores the trimmed FASTQ files if trimming was performed."
-	echo -e "\t 4.3 stat: Provides statistical information about trimming (if applicable) and alignment coverage."
-	echo
-	echo -e "This streamlined workflow ensures accurate and efficient read alignment, while the organized output facilitates downstream analysis."
-	echo
-	echo "Syntax: run_aln_short.sh [h|s|1|2|o|r|c|t]"
-    	echo "options:"
-    	echo "-h     Print this Help."
-    	echo "-c     Number of cpus to use."
-    	echo "-o     Output directory."
-    	echo "-s     Sample name."
-    	echo "-1     Path to the read1 FASTQ"
-    	echo "-2     Path to the read2 FASTQ"
-    	echo "-r     Path to the Dragmap reference folder."
-    	echo "-t     Trimming. Default false."
-    	echo
+   echo
+   echo "This pipeline employs DragMap for efficient read alignment, incorporating optional preprocessing and post-processing steps."
+   echo
+   echo "Key Steps:"
+   echo
+   echo "  1. Optional Trimming: If enabled, reads are initially trimmed using the BBduk tool to remove low-quality bases and adaptors."
+   echo "  2. Alignment: The trimmed or original reads are aligned to the reference genome using DragMap."
+   echo "  3. Duplicate Marking and Removal: Samtools markdup is utilized to identify and remove potential PCR duplicates from the aligned reads."
+   echo "  4. Output Organization: Results are organized into three distinct folders:"
+   echo -e "\t 4.1 aln: Contains the final aligned BAM file."
+   echo -e "\t 4.2 fastq: Stores the trimmed FASTQ files if trimming was performed."
+   echo -e "\t 4.3 stat: Provides statistical information about trimming (if applicable) and alignment coverage."
+   echo
+   echo -e "This streamlined workflow ensures accurate and efficient read alignment, while the organized output facilitates downstream analysis."
+   echo
+   echo "Syntax: run_aln_short.sh [h|s|1|2|o|r|c|t|b]"
+      echo "options:"
+      echo "-h     Print this Help."
+      echo "-c     Number of cpus to use."
+      echo "-o     Output directory."
+      echo "-s     Sample name."
+      echo "-1     Path to the read1 FASTQ"
+      echo "-2     Path to the read2 FASTQ"
+      echo "-r     Path to the Dragmap reference folder."
+      echo "-t     Trimming. Default false."
+      echo "-b     BED file with regions will be used to compute coverage. Otherwise coverage stats are computed whole genome."
+      echo
 }
 
 # A POSIX variable
 OPTIND=1         # Reset in case getopts has been used previously in the shell.
 declare -i count=0
 trim="false"
-while getopts ":ht:c:o:s:1:2:r:t:" option; do
+BED=""
+while getopts ":ht:c:o:s:1:2:r:t:b:" option; do
    case $option in
       h) # display Help
          Help
@@ -95,6 +97,9 @@ while getopts ":ht:c:o:s:1:2:r:t:" option; do
          ;;
       t)
          trim=${OPTARG}
+         ;;
+      b)
+         BED=${OPTARG}
          ;;
       :)
          print_error "Option -${OPTARG} requires an argument."
@@ -170,7 +175,13 @@ print_info "Indexing ..."
 rm -rf "${ALN_FOLDER}/${SAMPLE}.unsorted.bam"
 ionice -c 3 sambamba index -t ${cpus} "${ALN_FOLDER}/${SAMPLE}.sorted.uniq.bam"
 
-print_info "Compute coverage.."
-samtools coverage "${ALN_FOLDER}/${SAMPLE}.sorted.uniq.bam" > "${STAT_FOLDER}/${SAMPLE}.sorted.uniq.bam.cov.txt"
-print_info "ALL FINISHED!!"
-
+if [ "${BED}" != "" ]; then
+   if [ -f ${BED} ]; then
+      print_info "Bed file provided, compute ontarget coverage.."
+      mosdepth_d4 -t ${cpus} --by ${BED} ${STAT_FOLDER}/ontarget.coverage "${ALN_FOLDER}/${SAMPLE}.sorted.uniq.bam"
+   fi
+else
+   print_info "Compute WGS coverage coverage.."
+   mosdepth_d4 -n -t $cpus --fast-mode --by 500 ${STAT_FOLDER}/wgs.coverage "${ALN_FOLDER}/${SAMPLE}.sorted.uniq.bam"
+   print_info "ALL FINISHED!!"
+fi
