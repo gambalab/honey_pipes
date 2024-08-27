@@ -1,6 +1,6 @@
 # $ git clone https://github.com/gambalab/honey_pipes
 # $ cd honey_pipes
-# $ sudo docker build -f ./Dockerfile -t honey_tools .
+# $ sudo docker build -f ./Dockerfile -t honey_pipes .
 
 # Stage miniconda envs
 FROM continuumio/miniconda3:latest AS conda_setup
