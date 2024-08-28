@@ -106,9 +106,9 @@ ${HONEY_exec} dragen-os \
 ## 2. Pipeline for FAST5/POD5 to POD5 Split by Channel.
 **Description:** This pipeline converts input FAST5/POD5 files into POD5 Split by Channel in order to optimize basecalling performance. Splitting POD5 files by channel can significantly improve performance, especially when working with large datasets or on systems with limited I/O capabilities. The pipeline supports parallel processing for faster conversion of large datasets.
 
-**Input:** Folder with FAST5/POD5 files.
-**Processing:** Uses the pod5 package to efficiently divide FAST5 files into channel-specific POD5 formats.
-**Output:** Channel-specific POD5 files. 
+* **Input:** Folder with FAST5/POD5 files.
+* **Processing:** Uses the pod5 package to efficiently divide FAST5 files into channel-specific POD5 formats.
+* **Output:** Channel-specific POD5 files. 
 
 The pipeline is coded in the ```run_split_pod5.sh``` script and can be run in the following way:
 ```bash
