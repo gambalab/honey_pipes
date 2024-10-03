@@ -265,37 +265,6 @@ ${HONEY_exec} \
 ```
 Aligned and merged BAM file will be storend into ```/path/to/output_folder/sample_name/SM_tag.sorted.uniq.bam```.
 
-## 4. Pipeline for SVs.
-**Description:** to add.
-
-* **Input:** to add.
-
-* **Processing:**
-    * a
-    * b
-    * c
-
-* **Output:** to add.
-
-The pipeline is coded in the ```run_svs.sh``` script and can be run in the following way:
-```bash
-# Let's define a honey_pipe_exec variable to excec the several commands
-HONEY_exec="singularity exec --bind /usr/lib/locale/ path/to/honey_pipes_1.0.0.sif"
-
-# Let's see the help
-${HONEY_exec} run_svs.sh -h
-```
-```
-This pipeline employs ..
-```
-So a typical case of use will be something like this:
-```bash
-#NOTE: by default the SM tag used is the sample name provided with -S
-${HONEY_exec} \
-    run_svs.sh -h
-```
-Aligned and merged BAM file will be storend into ```/path/to/output_folder/sample_name/```.
-
 
 ## Acknowledgements
 Honey pipes happily makes use of many open source packages. We would like to specifically call out a few key ones:
