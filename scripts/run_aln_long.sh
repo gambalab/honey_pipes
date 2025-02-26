@@ -55,6 +55,7 @@ Help()
         echo "-p     Minimap2 preset for indexing and mapping. Alias for the -x option in minimap2. [default: lr:hqae]. You can change it with lr:hq or map-ont or any other supported by minimap2."
         echo "-M     Total amount of memory to use for sorting reads. Default is 16GB. Higer amount will increase perfomances lowering I/O operation. A good value is 60GB."
         echo "-l     Library kit to use in the LB TAG of final bam file. Deafaul value is R10.4.1_LSK14"
+        echo "-c     Experimental option. Do not hard clip reads (e.g. use -Y)."
         echo
 }
 
@@ -67,7 +68,7 @@ INDIVIDUAL=""
 M2_PRESET="lr:hqae"
 MEM=16
 LB_KIT="R10.4.1_LSK14"
-while getopts ":hl:s:p:T:M:t:o:S:i:m:r:l:" option; do
+while getopts ":hl:s:p:T:M:t:o:S:i:m:r:l:c:" option; do
    case $option in
       h) # display Help
          Help
@@ -109,6 +110,9 @@ while getopts ":hl:s:p:T:M:t:o:S:i:m:r:l:" option; do
          ;;
       l) 
          LB_KIT=${OPTARG}
+         ;;
+      c)
+         M2_PRESET="${M2_PRESET} -Y"
          ;;
       :)
          print_error "Option -${OPTARG} requires an argument."
