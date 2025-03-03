@@ -68,7 +68,7 @@ INDIVIDUAL=""
 M2_PRESET="lr:hqae"
 MEM=16
 LB_KIT="R10.4.1_LSK14"
-while getopts ":hl:s:p:T:M:t:o:S:i:m:r:l:c:" option; do
+while getopts ":hcl:s:p:T:M:t:o:S:i:m:r:" option; do
    case $option in
       h) # display Help
          Help
