@@ -1,11 +1,11 @@
 # HONEY PIPES
 A set high-performance, easy-to-use, open source pipelines for processing Illumina and Oxford Nanopore reads.
-If you use this repository please cite our manuscript on Bioxriv available at following address **www_URL_coming_soon.com**.
+If you use this repository please cite our manuscript on [Cell Reports Methods](https://www.cell.com/cell-reports-methods/fulltext/S2667-2375(25)00143-2).
 
 ## Features
-This repository provides pipelines used in our recent publication available on BioRxiv at **www_URL_coming_soon.com** for processing raw Oxford Nanopore Technology (ONT) and Illumina sequencing data from three key consortia: Genome in a Bottle (GIAB), Human Pangenome Reference Consortium (HPRC), and Oxford Nanopore Technologies Open Data (ONT OD).
+This repository provides pipelines used in our recent publication available on on [Cell Reports Methods](https://www.cell.com/cell-reports-methods/fulltext/S2667-2375(25)00143-2) for processing raw Oxford Nanopore Technology (ONT) and Illumina sequencing data from three key consortia: Genome in a Bottle (GIAB), Human Pangenome Reference Consortium (HPRC), and Oxford Nanopore Technologies Open Data (ONT OD).
 
-* **Harmonized data**: The processed data is now publicly available for the scientific community at **www_URL_coming_soon.com**.
+* **Harmonized data**: The processed data is now publicly available for the scientific community on [Cell Reports Methods](https://www.cell.com/cell-reports-methods/fulltext/S2667-2375(25)00143-2).
 
 * **Hybrid DeepVariant training**: This data was then used to train a novel DeepVariant model specifically designed for identifying variants from combined short-read and long-read sequencing data (hybrid sequencing). The resulting Honey DeepVariant tool for variant calling in hybrid sequencing data is available on GitHub: https://github.com/gambalab/honey_deepvariant
 
